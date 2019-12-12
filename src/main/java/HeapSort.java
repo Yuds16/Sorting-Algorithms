@@ -1,14 +1,31 @@
-import java.time.*;
-
 public class HeapSort extends Sorter {
-
-    private Duration duration;
-    private Instant startTime;
 
     public HeapSort(int[] arr) {
         super(arr);
-        startTime = Instant.now();
+        setStartTime();
         sort(copyArray(arr));
+    }
+
+    public void sort(int[] arr) {
+        int n = arr.length;
+
+        // Build heap (rearrange array)
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(arr, n, i);
+        }
+
+        // One by one extract an element from heap
+        for (int i=n-1; i>=0; i--) {
+            // Move current root to end
+            int temp = arr[0];
+            arr[0] = arr[i];
+            arr[i] = temp;
+
+            // call max heapify on the reduced heap
+            heapify(arr, i, 0);
+        }
+        setDuration();
+        setSorted(arr);
     }
 
     // To heapify a subtree rooted with node i which is
@@ -37,45 +54,5 @@ public class HeapSort extends Sorter {
             // Recursively heapify the affected sub-tree
             heapify(arr, n, largest);
         }
-    }
-
-    public void sort(int[] arr) {
-        int n = arr.length;
-
-        // Build heap (rearrange array)
-        for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(arr, n, i);
-        }
-
-        // One by one extract an element from heap
-        for (int i=n-1; i>=0; i--) {
-            // Move current root to end
-            int temp = arr[0];
-            arr[0] = arr[i];
-            arr[i] = temp;
-
-            // call max heapify on the reduced heap
-            heapify(arr, i, 0);
-        }
-        duration = Duration.between(startTime, Instant.now());
-        setSorted(arr);
-    }
-
-    public long getDuration() {
-        if (duration == null) {
-            return 0;
-        }
-        return duration.toNanos();
-    }
-
-    public void printDuration() {
-        System.out.println(getDuration() + " nanoseconds");
-    }
-
-    public void printInfo() {
-        System.out.println("HeapSort size: " + getUnsorted().length);
-        printArrays();
-        printDuration();
-        System.out.println();
     }
 }

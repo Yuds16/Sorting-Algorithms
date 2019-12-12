@@ -1,14 +1,8 @@
-import java.time.Duration;
-import java.time.Instant;
-
 public class BubbleSort extends Sorter {
-
-    private Duration duration;
-    private Instant startTime;
 
     public BubbleSort(int[] arr) {
         super(arr);
-        startTime = Instant.now();
+        setStartTime();
         sort(copyArray(arr));
     }
 
@@ -24,25 +18,7 @@ public class BubbleSort extends Sorter {
                 }
             }
         }
-        duration = Duration.between(startTime, Instant.now());
+        setDuration();
         setSorted(arr);
-    }
-
-    public long getDuration() {
-        if (duration == null) {
-            return 0;
-        }
-        return duration.toNanos();
-    }
-
-    public void printDuration() {
-        System.out.println(getDuration() + " nanoseconds");
-    }
-
-    public void printInfo() {
-        System.out.println("BubbleSort size: " + getUnsorted().length);
-        printArrays();
-        printDuration();
-        System.out.println();
     }
 }
